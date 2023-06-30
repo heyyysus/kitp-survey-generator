@@ -9,8 +9,10 @@ DB_USER = os.environ.get('DB_USER')
 DB_PASS = os.environ.get('DB_PASS') 
 DB_NAME = os.environ.get('DB_NAME') 
 
-mydb = mysql.connector.connect(
-    host = DB_HOST,
-    user = DB_USER,
-    password = DB_PASS,
-)
+def connect():
+    db = mysql.connector.connect(
+        host = DB_HOST,
+        user = DB_USER,
+        password = DB_PASS,
+    )
+    return db
