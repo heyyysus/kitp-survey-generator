@@ -14,5 +14,3 @@ mydb = mysql.connector.connect(
     user = DB_USER,
     password = DB_PASS,
 )
-
-print(mydb)
