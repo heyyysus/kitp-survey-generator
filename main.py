@@ -5,21 +5,24 @@ db_conx = db.connect()
 curr = db_conx.cursor()
 
 css_fn = 'style.css'
-template_fn = 'body.html'
-header_fn = 'header.html'
+template_fn = 'template/body.html'
+header_fn = 'template/header.html'
+rendered_header_fn = 'template/rendered_header.html'
 program_name = 'brainlearn23'
 
 
 # Fetch people
-sql_query = '''select distinct # first_name, last_name, 
+sql_query = '''select distinct
 CONCAT(last_name, ',', ' ', first_name, ' ', '(', short_institution, ')') as 'Display'
 from folks_visits
 where activity = %s and commit_level in ('a','s','l')
 and  person_id != 25627
 
-order by last_name'''.format(program_name)
+order by last_name'''
 
-curr.execute(sql_query, (program_name))
+curr.execute(sql_query, [program_name])
+
+people = [person[0] for person in curr]
 
 
 # Render header file
@@ -27,7 +30,7 @@ with open(header_fn, 'r') as header:
     data = header.read()
     data = data.format(program_name=program_name)
 
-    with open("{}-temp".format(header_fn), 'w') as header_temp:
+    with open(rendered_header_fn, 'w') as header_temp:
         header_temp.write(data)
         header_temp.close()
     
@@ -35,13 +38,11 @@ with open(header_fn, 'r') as header:
 
 # Add rendered header file to options
 options = {
-    'header-html': "{}-temp".format(header_fn)
+    'header-html': rendered_header_fn
 }
-
-# Get people from program
 
 # Open template file and render to pdf
 with open(template_fn, 'r') as f:
     data = f.read()
-    data = data.format(name="BRAINLEARN23")
+    data = data.format(folks_table="TABLE")
     pdfkit.from_string(data, 'out.pdf', options=options)
