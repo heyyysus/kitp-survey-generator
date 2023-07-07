@@ -1,0 +1,24 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 48%;
+    font-size: 12px;
+}
+
+td, th {
+    border: 1px solid #5c5c5c;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+table#t1 {
+    float: left;
+}
+
+table#t2 {
+    float: right;
+}
