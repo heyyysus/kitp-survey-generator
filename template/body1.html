@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="pdfkit-page-size" content="Letter"/>
+        <meta name="pdfkit-orientation" content="Landscape"/>
+        <meta name="pdfkit-margin-top" content="1in"/>
+        <meta name="pdfkit-margin-right" content="0.75in"/>
+        <meta name="pdfkit-margin-bottom" content="1in"/>
+        <meta name="pdfkit-margin-left" content="0.75in"/>
+        <meta charset="UTF-8">
+
+    </head>
+    <body style="font-family: Arial, Helvetica, sans-serif;">
+        
+        <div class="name-date">
+            <p style="float: left">Name:___________________________</h3>
+            <p style="float: right">Date:___________________________</h3>
+        </div>
+
+        <br /><br />
+
+        <div>
+            <p>This 3-page survey takes about 5 minutes to complete. KITP will use the data to examine how its programs affect participants' collaboration networks. Return it to room 1102 or the key drop box when you've completed it. Thank you!
+            </p>
+        </div>
+        <div>
+            <p>
+                <b>Had you collaborated with any of these {program_name} invitees prior to the program, and/or did you collaborate with them during the program? Check all that apply.</b> For the purposes of this survey, "collaborate" means "interact on a project that is not part of a large, institutional collaboration."
+            </p>
+        </div>
+        <div class="people-table-container">
+            {folks_table}   
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="not-listed-table-container">
+            <h3>
+                During the program, did you actively continue or begin collaborative work with anyone not listed above? 
+                Write a number of collaborators for each category below.
+            </h3>
+            <table>
+                
+                <tr>
+                    <th>Continued</th>
+                    <th>Began</th>
+                    <th>Category</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>KITP/UCSB personnel</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{program_name} program or conference participant not listed here</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Participant in a concurrent KITP program</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Someone unaffiliated with KITP/UCSB or the program</td>
+                </tr>
+            </table>
+        </div>
+        
+    </body>
+</html>

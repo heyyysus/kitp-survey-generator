@@ -2,15 +2,23 @@ import pdfkit
 import db
 import string
 import math
+import os 
+import sys
+from PyPDF2 import PdfMerger, PdfReader
+
+if not len(sys.argv) == 2:
+    print("Use: python3 main.py <PROGRAM_CODE>")
+    exit(1)
 
 db_conx = db.connect()
 curr = db_conx.cursor()
 
 css_fn = 'template/style.css'
-template_fn = 'template/body.html'
+body1_fn = 'template/body1.html'
+body2_fn = 'template/body2.html'
 header_fn = 'template/header.html'
 rendered_header_fn = 'template/rendered_header.html'
-program_name = 'brainlearn23'
+program_name = sys.argv[1]
 
 
 # Fetch people
@@ -27,7 +35,7 @@ curr.execute(sql_query, [program_name])
 people = [person[0] for person in curr]
 
 n = len(people)
-mid = math.ceil(n/2)
+mid = math.ceil(n * 0.50)
 
 # Render header file
 with open(header_fn, 'r') as header:
@@ -64,8 +72,33 @@ table_2_html = table_2_html.format(table_2_inner)
 
 table_html = table_1_html + table_2_html
 
-# Open template file and render to pdf
-with open(template_fn, 'r') as f:
+# Make './out' dir if not exists
+if not os.path.exists('out'):
+    os.makedirs('out')
+
+# Open body files and render to pdfs
+with open(body1_fn, 'r') as f:
     data = f.read()
     data = data.format(folks_table=table_html, program_name=program_name.upper())
-    pdfkit.from_string(data, 'out.pdf', options=options, css=css_fn)
+    pdfkit.from_string(data, 'out/out1.pdf', options=options, css=css_fn)
+
+with open(body2_fn, 'r') as f:
+    data = f.read()
+    pdfkit.from_string(data, 'out/out2.pdf', options=options, css=css_fn)
+
+# Merge body pdf files
+merger = PdfMerger()
+
+merger.append(PdfReader(open('out/out1.pdf', 'rb')))
+merger.append(PdfReader(open('out/out2.pdf', 'rb')))
+
+output = open('out/{}-survey.pdf'.format(program_name), 'wb')
+merger.write(output)
+
+merger.close()
+output.close()
+
+# Delete temporary out and header files
+os.remove('out/out1.pdf')
+os.remove('out/out2.pdf')
+os.remove('template/rendered_header.html')

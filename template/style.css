@@ -1,14 +1,21 @@
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 48%;
-    font-size: 12px;
+    font-size: 11px;
+}
+
+div.people-table-container > table {
+    width: 100%;
+}
+
+div.people-table-container {
+    width: 100%
 }
 
 td, th {
     border: 1px solid #5c5c5c;
     text-align: left;
-    padding: 8px;
+    padding: 6px;
 }
 
 tr:nth-child(even) {
@@ -17,8 +24,17 @@ tr:nth-child(even) {
 
 table#t1 {
     float: left;
+    width: 48%;
 }
 
 table#t2 {
     float: right;
+    width: 48%
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+    margin-bottom: 50px;
 }

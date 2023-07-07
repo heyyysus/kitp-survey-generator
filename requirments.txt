@@ -2,3 +2,4 @@ python-dotenv
 mysql-connector-python
 python-dotenv
 pdfkit
+PyPDF2
