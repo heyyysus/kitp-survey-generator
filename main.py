@@ -54,7 +54,19 @@ options = {
 }
 
 # Render table html
-table_1_html = '<table id="t1"><tr><th>Prior to the program</th><th>During the program</th><th></th></tr>{}</table>'
+table_1_html = '''<table id="t1">
+<colgroup>
+       <col span="1" style="width: 18%;">
+       <col span="1" style="width: 18%;">
+       <col span="1" style="width: 64%;">
+</colgroup>
+<thead>
+    <tr><th>Prior to the program</th><th>During the program</th><th></th></tr>
+</thead>
+<tbody>
+    {}
+</tbody>
+</table>'''
 table_1_inner = ""
 
 for p in people[ : mid]:
@@ -62,7 +74,19 @@ for p in people[ : mid]:
 
 table_1_html = table_1_html.format(table_1_inner)
 
-table_2_html = '<table id="t2"><tr><th>Prior to the program</th><th>During the program</th><th></th></tr>{}</table>'
+table_2_html = '''<table id="t2">
+<colgroup>
+       <col span="1" style="width: 18%;">
+       <col span="1" style="width: 18%;">
+       <col span="1" style="width: 64%;">
+</colgroup>
+<thead>
+    <tr><th>Prior to the program</th><th>During the program</th><th></th></tr>
+</thead>
+<tbody>
+    {}
+</tbody>
+</table>'''
 table_2_inner = ""
 
 for p in people[mid : ]:
@@ -84,6 +108,7 @@ with open(body1_fn, 'r') as f:
 
 with open(body2_fn, 'r') as f:
     data = f.read()
+    data = data.format(program_name=program_name.upper())
     pdfkit.from_string(data, 'out/out2.pdf', options=options, css=css_fn)
 
 # Merge body pdf files
