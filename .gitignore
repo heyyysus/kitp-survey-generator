@@ -1,3 +1,4 @@
 .env
 out
 template/rendered_header.html
+.DS_Store
