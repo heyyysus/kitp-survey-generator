@@ -4,7 +4,49 @@ import string
 import math
 import os 
 import sys
-from PyPDF2 import PdfMerger, PdfReader
+from PyPDF2 import PdfMerger, PdfReader, PdfWriter
+from reportlab.lib.units import inch
+from reportlab.pdfgen import canvas
+
+def create_page_pdf(num, tmp):
+    c = canvas.Canvas(tmp, pagesize=(11*inch, 8.5*inch))
+    for i in range(1, num + 1):
+        c.drawString(9 * inch, 0.3 * inch, "Page {} of {}".format(i, num))
+        c.showPage()
+    c.save()
+
+
+def add_page_numbers(pdf_path, newpath):
+    """
+    Add page numbers to a pdf, save the result as a new pdf
+    @param pdf_path: path to pdf
+    """
+    tmp = "__tmp.pdf"
+
+    writer = PdfWriter()
+    with open(pdf_path, "rb") as f:
+        reader = PdfReader(f)
+        n = len(reader.pages)
+
+        # create new PDF with page numbers
+        create_page_pdf(n, tmp)
+
+        with open(tmp, "rb") as ftmp:
+            number_pdf = PdfReader(ftmp)
+            # iterarte pages
+            for p in range(n):
+                page = reader.pages[p]
+                number_layer = number_pdf.pages[p]
+                # merge number page with actual page
+                page.merge_page(number_layer)
+                writer.add_page(page)
+
+            # write result
+            if len(writer.pages) > 0:
+                with open(newpath, "wb") as f:
+                    writer.write(f)
+        os.remove(tmp)
+
 
 if not len(sys.argv) == 2:
     print("Use: python3 main.py <PROGRAM_CODE>")
@@ -117,13 +159,18 @@ merger = PdfMerger()
 merger.append(PdfReader(open('out/out1.pdf', 'rb')))
 merger.append(PdfReader(open('out/out2.pdf', 'rb')))
 
-output = open('out/{}-survey.pdf'.format(program_name), 'wb')
+output = open('out/{}-survey_nonum.pdf'.format(program_name), 'wb')
 merger.write(output)
 
 merger.close()
 output.close()
 
+# Invoke add_page_numbers
+add_page_numbers('out/{}-survey_nonum.pdf'.format(program_name), 'out/{}-survey.pdf'.format(program_name))
+
+
 # Delete temporary out and header files
 os.remove('out/out1.pdf')
 os.remove('out/out2.pdf')
 os.remove('template/rendered_header.html')
+os.remove('out/{}-survey_nonum.pdf'.format(program_name))
